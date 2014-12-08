@@ -2,12 +2,15 @@ package hu.gyerob.mihf;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,6 +23,7 @@ public class Frame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel tableModel;
+	private JButton tanit;
 
 	private ArrayList<float[]> m1;
 	private ArrayList<float[]> m2;
@@ -38,6 +42,18 @@ public class Frame extends JFrame {
 
 		table = new JTable();
 
+		tanit = new JButton();
+		tanit.setText("Tanít");
+		tanit.setBounds(0, 0, 100, 50);
+		tanit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tanit();
+			}
+		});
+		contentPane.add(tanit, BorderLayout.NORTH);
+
 		JScrollPane scrollPane = new JScrollPane();
 		// scrollPane.setBounds(0, 0, 650, 261);
 		contentPane.add(scrollPane);
@@ -49,6 +65,10 @@ public class Frame extends JFrame {
 
 		readData();
 		setTable();
+	}
+
+	private void tanit() {
+
 	}
 
 	private void setTable() {
@@ -146,7 +166,7 @@ public class Frame extends JFrame {
 				// System.out.println(line);
 			}
 
-			System.out.print(m1.get(1)[0] + " ");
+			// System.out.print(m1.get(1)[0] + " ");
 
 			br.close();
 		} catch (FileNotFoundException e) {
