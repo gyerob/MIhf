@@ -23,7 +23,9 @@ public class Frame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JButton tanit;
+	private JButton tanit1;
+	private JButton tanit2;
+	private JButton tanit3;
 
 	private ArrayList<float[]> m1;
 	private ArrayList<float[]> m2;
@@ -32,7 +34,7 @@ public class Frame extends JFrame {
 	public Frame() {
 		super("MI HF");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setMinimumSize(new Dimension(1000, 400));
+		setMinimumSize(new Dimension(1300, 400));
 		setResizable(false);
 
 		contentPane = new JPanel();
@@ -42,22 +44,33 @@ public class Frame extends JFrame {
 
 		table = new JTable();
 
-		tanit = new JButton();
-		tanit.setText("Tanít");
-		tanit.setBounds(0, 0, 100, 50);
-		tanit.addActionListener(new ActionListener() {
+		tanit1 = new JButton();
+		tanit1.setText("Tanít 1-2");
+		tanit1.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				tanit();
 			}
 		});
-		contentPane.add(tanit, BorderLayout.NORTH);
+
+		tanit2 = new JButton();
+		tanit2.setText("Tanít 1-3");
+
+		tanit3 = new JButton();
+		tanit3.setText("Tanít 2-3");
+
+		JPanel subpanel = new JPanel();
+		subpanel.setLayout(new BorderLayout(0, 0));
+		subpanel.add(tanit1, BorderLayout.LINE_START);
+		subpanel.add(tanit2, BorderLayout.CENTER);
+		subpanel.add(tanit3, BorderLayout.LINE_END);
+
+		contentPane.add(subpanel, BorderLayout.NORTH);
 
 		JScrollPane scrollPane = new JScrollPane();
-		// scrollPane.setBounds(0, 0, 650, 261);
-		contentPane.add(scrollPane);
 		scrollPane.setViewportView(table);
+		contentPane.add(scrollPane);
 
 		m1 = new ArrayList<float[]>();
 		m2 = new ArrayList<float[]>();
@@ -68,7 +81,9 @@ public class Frame extends JFrame {
 	}
 
 	private void tanit() {
-
+		
+		ArrayList<Integer> vart_kimenet = new ArrayList<Integer>();
+		
 	}
 
 	private void setTable() {
@@ -76,7 +91,7 @@ public class Frame extends JFrame {
 				"Ash", "Alcalinity of ash", "Magnesium", "Total phenols",
 				"Flavanoids", "Nonflavanoid phenols", "Proanthocyanins",
 				"Color intensity", "Hue", "OD280/OD315 of diluted wines",
-				"Proline" };
+				"Proline", "Tanít1-2", "Tanít1-3", "Tanít2-3" };
 		int sorok = m1.size() + m2.size() + m3.size();
 		int i = 0;
 
@@ -88,16 +103,13 @@ public class Frame extends JFrame {
 			data = null;
 			if (i < m1.size()) {
 				data = m1.get(i);
-				tableModel.setValueAt(1, i, 0); // Class
-				// tableModel.setValueAt(data[0], i, 1);
+				tableModel.setValueAt(1, i, 0);
 			} else if (i < (m2.size() + m1.size())) {
 				data = m2.get(i - m1.size());
-				tableModel.setValueAt(2, i, 0); // Class
-				// tableModel.setValueAt(data[0], i, 1);
+				tableModel.setValueAt(2, i, 0);
 			} else {
 				data = m3.get(i - m1.size() - m2.size());
-				tableModel.setValueAt(3, i, 0); // Class
-				// tableModel.setValueAt(data[0], i, 1);
+				tableModel.setValueAt(3, i, 0);
 			}
 
 			tableModel.setValueAt(data[0], i, 1); // Alcohol
@@ -134,10 +146,6 @@ public class Frame extends JFrame {
 
 				data = new float[13];
 
-				/*
-				 * for (int i = 0; i < linearray.length; i++) {
-				 * System.out.print(linearray[i] + " "); } System.out.println();
-				 */
 				data[0] = Float.parseFloat(linearray[1]);
 				data[1] = Float.parseFloat(linearray[2]);
 				data[2] = Float.parseFloat(linearray[3]);
@@ -154,19 +162,12 @@ public class Frame extends JFrame {
 
 				if (linearray[0].equals("1")) {
 					m1.add(data);
-					/*
-					 * for (int i = 0; i < data.length; i++) {
-					 * System.out.print(data[i] + " "); } System.out.println();
-					 */
 				} else if (linearray[0].equals("2")) {
 					m2.add(data);
 				} else if (linearray[0].equals("3")) {
 					m3.add(data);
 				}
-				// System.out.println(line);
 			}
-
-			// System.out.print(m1.get(1)[0] + " ");
 
 			br.close();
 		} catch (FileNotFoundException e) {
