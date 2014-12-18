@@ -57,8 +57,24 @@ public class Frame extends JFrame {
 		tanit2 = new JButton();
 		tanit2.setText("Tanít 1-3");
 
+		tanit2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tanit(2);
+			}
+		});
+
 		tanit3 = new JButton();
 		tanit3.setText("Tanít 2-3");
+
+		tanit3.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tanit(3);
+			}
+		});
 
 		JPanel subpanel = new JPanel();
 		subpanel.setLayout(new BorderLayout(0, 0));
@@ -81,11 +97,11 @@ public class Frame extends JFrame {
 	}
 
 	private float ertekel(float[] suly, float[] adat) {
-		float sum = suly[0] * adat[0] /*+ suly[1] * adat[1] + suly[2] * adat[2]
+		float sum = suly[0] * adat[0] + suly[1] * adat[1] + suly[2] * adat[2]
 				+ suly[3] * adat[3] + suly[4] * adat[4] + suly[5] * adat[5]
 				+ suly[6] * adat[6] + suly[7] * adat[7] + suly[8] * adat[8]
 				+ suly[9] * adat[9] + suly[10] * adat[10] + suly[11] * adat[11]
-				+ suly[12] * adat[12]*/;
+				+ suly[12] * adat[12];
 		return (sum >= 0f) ? 1f : -1f;
 	}
 
@@ -94,11 +110,11 @@ public class Frame extends JFrame {
 		ArrayList<Integer> d = new ArrayList<Integer>();
 		if (mode == 1) {
 			// elsõ osztály értékeihez 1
-			for (int i = 0; i < /*m1.size()*/ 3; i++) {
+			for (int i = 0; i < m1.size(); i++) {
 				d.add(1);
 			}
 			// másodikéhoz -1 értéket rendelünk
-			for (int i = 0; i < /*m2.size()*/ 3; i++) {
+			for (int i = 0; i < m2.size(); i++) {
 				d.add(-1);
 			}
 
@@ -118,12 +134,13 @@ public class Frame extends JFrame {
 					// kimenet kiszámítása
 					if (i < m1.size()) {
 						y = ertekel(sulyok, m1.get(i));
+						tableModel.setValueAt(y, i, 14);
 					} else {
 						y = ertekel(sulyok, m2.get(i - m1.size()));
+						tableModel.setValueAt(y, i, 14);
 					}
-					//System.out.println(y);
 
-					epszilon = (float)d.get(i) - y;
+					epszilon = (float) d.get(i) - y;
 					float[] adat;
 
 					for (int j = 0; j < 13; j++) {
@@ -135,12 +152,12 @@ public class Frame extends JFrame {
 
 						sulyok[j] += tanulasi_tenyezo * epszilon * adat[j];
 					}
-					
-					//hiba +=Math.abs(epszilon);
+
+					hiba += epszilon * epszilon;
 				}
 				System.out.println(iteracio);
 				iteracio++;
-			} while (/*hiba != 0f &&*/ iteracio < 10000);
+			} while (hiba != 0f && iteracio < 10000);
 
 		} else if (mode == 2) {
 			for (int i = 0; i < m1.size(); i++) {
@@ -149,6 +166,48 @@ public class Frame extends JFrame {
 			for (int i = 0; i < m3.size(); i++) {
 				d.add(-1);
 			}
+
+			int input_meret = d.size();
+			// kezdeti súlyozás 0;
+			float[] sulyok = { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,
+					0f, 0f };
+			float tanulasi_tenyezo = 0.1f;
+			float hiba, epszilon, y;
+			int iteracio = 0;
+
+			do {
+				hiba = 0;
+
+				for (int i = 0; i < input_meret; i++) {
+
+					// kimenet kiszámítása
+					if (i < m1.size()) {
+						y = ertekel(sulyok, m1.get(i));
+						tableModel.setValueAt(y, i, 15);
+					} else {
+						y = ertekel(sulyok, m3.get(i - m1.size()));
+						tableModel.setValueAt(y, i + m2.size(), 15);
+					}
+
+					epszilon = (float) d.get(i) - y;
+					float[] adat;
+
+					for (int j = 0; j < 13; j++) {
+						if (i < m1.size()) {
+							adat = m1.get(i);
+						} else {
+							adat = m3.get(i - m1.size());
+						}
+
+						sulyok[j] += tanulasi_tenyezo * epszilon * adat[j];
+					}
+
+					hiba += epszilon * epszilon;
+				}
+				System.out.println(iteracio);
+				iteracio++;
+			} while (hiba != 0f && iteracio < 10000);
+
 		} else if (mode == 3) {
 			for (int i = 0; i < m2.size(); i++) {
 				d.add(1);
@@ -156,6 +215,48 @@ public class Frame extends JFrame {
 			for (int i = 0; i < m3.size(); i++) {
 				d.add(-1);
 			}
+
+			int input_meret = d.size();
+			// kezdeti súlyozás 0;
+			float[] sulyok = { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,
+					0f, 0f };
+			float tanulasi_tenyezo = 0.1f;
+			float hiba, epszilon, y;
+			int iteracio = 0;
+
+			do {
+				hiba = 0;
+
+				for (int i = 0; i < input_meret; i++) {
+
+					// kimenet kiszámítása
+					if (i < m2.size()) {
+						y = ertekel(sulyok, m2.get(i));
+						tableModel.setValueAt(y, i + m1.size(), 16);
+					} else {
+						y = ertekel(sulyok, m3.get(i - m2.size()));
+						tableModel.setValueAt(y, i + m1.size(), 16);
+					}
+
+					epszilon = (float) d.get(i) - y;
+					float[] adat;
+
+					for (int j = 0; j < 13; j++) {
+						if (i < m2.size()) {
+							adat = m2.get(i);
+						} else {
+							adat = m3.get(i - m2.size());
+						}
+
+						sulyok[j] += tanulasi_tenyezo * epszilon * adat[j];
+					}
+
+					hiba += epszilon * epszilon;
+				}
+				System.out.println(iteracio);
+				iteracio++;
+			} while (hiba != 0f && iteracio < 10000);
+
 		}
 	}
 
